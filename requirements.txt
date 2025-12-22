@@ -1,0 +1,25 @@
+# Core
+python-dotenv==1.0.0
+loguru==0.7.2
+
+# Database
+psycopg2-binary==2.9.9
+SQLAlchemy==2.0.23
+alembic==1.12.1
+
+# Web & Async
+aiohttp==3.9.1
+aiohttp-retry==2.8.3
+beautifulsoup4==4.12.2
+lxml==4.9.3
+
+# Scheduler
+APScheduler==3.10.4
+pytz==2023.3
+
+# Utils
+pydantic==2.5.0
+pydantic-settings==2.1.0
+python-dateutil==2.8.2
+requests==2.31.0
+fake-useragent==1.4.0

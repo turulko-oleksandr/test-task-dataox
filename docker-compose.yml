@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: autoria_db
+      POSTGRES_USER: autoria_user
+      POSTGRES_PASSWORD: autoria_pass
+    ports:
+      - "5433:5432"  # Використовуємо порт 5433 на хості щоб уникнути конфліктів
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./dumps:/dumps
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U autoria_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  scraper:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://autoria_user:autoria_pass@postgres:5432/autoria_db
+      - SCRAPER_START_TIME=12:00
+      - DUMP_TIME=12:05
+      - START_URL=https://auto.ria.com/uk/car/used/
+      - MAX_CONCURRENT_REQUESTS=3
+      - REQUEST_DELAY=2
+    volumes:
+      - ./dumps:/app/dumps
+      - ./logs:/app/logs
+    command: >
+      sh -c "echo 'Waiting for PostgreSQL...' && 
+             sleep 5 && 
+             echo 'Starting scraper...' && 
+             python -m src.main"
+
+volumes:
+  postgres_data:
