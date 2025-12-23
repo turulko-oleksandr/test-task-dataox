@@ -37,6 +37,10 @@ venv.bak/
 # Docker
 *.log
 
+# Alembic
+
+alembic.ini
+
 # Project specific
 .env
 dumps/
